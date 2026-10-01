@@ -4282,10 +4282,16 @@ var PRED_LOCK = new Date('2026-09-06T14:00:00');
 var PRED_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLScWWBecfqms-DPHdQ2mouye78xySrZGxThDigzZtO8J6Yph7g/formResponse';
 var PRED_ENTRY = {who:'entry.1428489355', champ:'entry.1564499213', spoon:'entry.1431976551', bold:'entry.553656045'};
 var PRED_CSV = 'https://docs.google.com/spreadsheets/d/1MUgZjx8C88DnGGDJ5ExRcNBvunZ_d1TZNWyFBieWgoI/gviz/tq?tqx=out:csv&sheet=Form%20Responses%201';   /* the linked responses sheet, read as CSV; needs 'Anyone with the link: Viewer' */
-/* seed: picks collected before the form existed */
+/* seed: picks from the response sheet, latest per owner (5 of 12 locked in before kickoff; one owner's submission didn't reach the Google Form response sheet, so it's seeded here by hand) */
 var PRED_BOARD = [
   {owner:'Sean Quincey', champ:'Sean Quincey', spoon:'Kevin Flanagan',
-   bold:'By week 3, all of Beans\u2019 players sign a letter demanding to be released from his team'},
+   bold:'Wednesday morning, week 4, Beans sends me a desperate text asking to ghost-manage his team for the rest of the yr, offering 75% of winnings'},
+  {owner:'Jon Nairn', champ:'James Lombardi', spoon:'Sean Quincey',
+   bold:'Niners another injury plagued season'},
+  {owner:'Ken Tinkham', champ:'Ken Tinkham', spoon:'Kevin Clemens',
+   bold:'Ken doesn\u2019t have one season ending IR top draft pick'},
+  {owner:'Darryl Powell', champ:'Darryl Powell', spoon:'Jon Nairn',
+   bold:'Just guessing of history. No reasoning at all !!!'},
   {owner:'Kevin Flanagan', champ:'Kevin Flanagan', spoon:'Patrick Hanna',
    bold:'Sean will lose his first 5 games and panic trades away his best players'}
 ];
