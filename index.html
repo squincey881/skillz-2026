@@ -4614,6 +4614,9 @@ setMe = function(who){ _origSetMe(who); PRED_SEL.who = who; setTimeout(function(
     if(/google/i.test(n)) s+=40;
     if(/en[-_](US|GB)/i.test(v.lang)) s+=20;
     if(/compact/i.test(n)) s-=50;
+    /* Android/Chrome: "network" voices are the neural-quality ones; "-local" voices are the small robotic ones */
+    if(v.localService===false || /network|online/i.test(v.voiceURI||'')) s+=90;
+    if(/-local\b/i.test(v.voiceURI||'')) s-=10;
     return s;
   }
   function enVoices(){
@@ -4627,15 +4630,19 @@ setMe = function(who){ _origSetMe(who); PRED_SEL.who = who; setTimeout(function(
     sel.innerHTML='';
     vs.forEach(function(v){
       var o=document.createElement('option');
-      o.value=v.voiceURI; o.textContent=v.name.replace(/Microsoft |Google /,'');
+      o.value=v.voiceURI; o.textContent=v.name.replace(/Microsoft |Google /,'')+((v.localService===false||/network/i.test(v.voiceURI||''))?' (online)':'');
       sel.appendChild(o);
     });
+    try{ var saved=localStorage.getItem('sk-voice'); if(saved && vs.some(function(v){return v.voiceURI===saved;})) sel.value=saved; }catch(e){}
+    if(!sel.dataset.bound){ sel.dataset.bound='1'; sel.addEventListener('change',function(){ try{ localStorage.setItem('sk-voice',sel.value); }catch(e){} }); }
     sel.style.display='inline-block';
   }
   function pickVoice(){
     var vs=enVoices();
-    if(sel && sel.value){
-      var chosen=vs.filter(function(v){ return v.voiceURI===sel.value; })[0];
+    var want=sel && sel.value;
+    if(!want){ try{ want=localStorage.getItem('sk-voice'); }catch(e){} }
+    if(want){
+      var chosen=vs.filter(function(v){ return v.voiceURI===want; })[0];
       if(chosen) return chosen;
     }
     return vs[0] || speechSynthesis.getVoices()[0] || null;
@@ -4708,7 +4715,7 @@ setMe = function(who){ _origSetMe(who); PRED_SEL.who = who; setTimeout(function(
     var text=seg.text.slice(baseOffset);
     if(!text){ segIdx++; baseOffset=0; lastBoundary=0; speakSeg(); return; }
     var u=new SpeechSynthesisUtterance(text);
-    var v=pickVoice(); if(v) u.voice=v;
+    var v=pickVoice(); if(v){ u.voice=v; if(v.lang) u.lang=v.lang; }
     u.rate=1.0; u.pitch=1.0;
     u.onstart=function(){ spokeAny=true; };
     u.onboundary=function(ev){ if(typeof ev.charIndex==='number') lastBoundary=baseOffset+ev.charIndex; };
